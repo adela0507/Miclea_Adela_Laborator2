@@ -17,16 +17,21 @@ namespace Miclea_Adela_Laborator2.Data
                 context.Books.AddRange(
                 new Book
                 {
-                    Title = "Baltagul",Author = "Mihail Sadoveanu",Price=Decimal.Parse("22")},
+                    Title = "Baltagul",
+                  AuthorID=1,
+                    Price=Decimal.Parse("22")},
                
                 new Book
                 {
-                    Title = "Enigma Otiliei", Author = "George Calinescu",Price=Decimal.Parse("18")},
+                    Title = "Enigma Otiliei", 
+                    AuthorID=1,
+                    Price=Decimal.Parse("18")},
                
                 new Book
                 {
                     Title = "Maytrei",
-                    Author = "Mirce  Eliade",Price=Decimal.Parse("27")}
+                   AuthorID=1,
+                    Price=Decimal.Parse("27")}
                
                 );
 

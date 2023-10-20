@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Miclea_Adela_Laborator2.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20231019163737_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20231020161723_InitalCreate1")]
+    partial class InitalCreate1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,27 @@ namespace Miclea_Adela_Laborator2.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuthorID"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AuthorID");
+
+                    b.ToTable("Author", (string)null);
+                });
+
             modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Book", b =>
                 {
                     b.Property<int>("ID")
@@ -33,9 +54,8 @@ namespace Miclea_Adela_Laborator2.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("AuthorID")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -45,6 +65,8 @@ namespace Miclea_Adela_Laborator2.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AuthorID");
 
                     b.ToTable("Book", (string)null);
                 });
@@ -96,6 +118,15 @@ namespace Miclea_Adela_Laborator2.Migrations
                     b.ToTable("Order", (string)null);
                 });
 
+            modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Book", b =>
+                {
+                    b.HasOne("Miclea_Adela_Laborator2.Models.Author", "Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorID");
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Order", b =>
                 {
                     b.HasOne("Miclea_Adela_Laborator2.Models.Book", "Book")
@@ -113,6 +144,11 @@ namespace Miclea_Adela_Laborator2.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Author", b =>
+                {
+                    b.Navigation("Books");
                 });
 
             modelBuilder.Entity("Miclea_Adela_Laborator2.Models.Book", b =>

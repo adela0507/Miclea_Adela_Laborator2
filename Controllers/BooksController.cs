@@ -48,6 +48,8 @@ namespace Miclea_Adela_Laborator2.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+
+            ViewData["Author"]=new SelectList(_context.Authors, "FirstName", "Lastname");
             return View();
         }
 
