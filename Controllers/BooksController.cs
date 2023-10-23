@@ -22,9 +22,8 @@ namespace Miclea_Adela_Laborator2.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            return _context.Books != null ?
-                        View(await _context.Books.ToListAsync()) :
-                        Problem("Entity set 'LibraryContext.Books'  is null.");
+            var libraryContext = _context.Books.Include(b => b.Author);
+            return View(await libraryContext.ToListAsync());
         }
 
         // GET: Books/Details/5
@@ -36,6 +35,7 @@ namespace Miclea_Adela_Laborator2.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (book == null)
             {
@@ -48,8 +48,7 @@ namespace Miclea_Adela_Laborator2.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
-
-            ViewData["Author"]=new SelectList(_context.Authors, "FirstName", "Lastname");
+            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID");
             return View();
         }
 
@@ -58,7 +57,7 @@ namespace Miclea_Adela_Laborator2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Title,Author,Price")] Book book)
+        public async Task<IActionResult> Create([Bind("ID,Title,AuthorID,Price")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +65,7 @@ namespace Miclea_Adela_Laborator2.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID", book.AuthorID);
             return View(book);
         }
 
@@ -82,6 +82,7 @@ namespace Miclea_Adela_Laborator2.Controllers
             {
                 return NotFound();
             }
+            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID", book.AuthorID);
             return View(book);
         }
 
@@ -90,7 +91,7 @@ namespace Miclea_Adela_Laborator2.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,Author,Price")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("ID,Title,AuthorID,Price")] Book book)
         {
             if (id != book.ID)
             {
@@ -117,6 +118,7 @@ namespace Miclea_Adela_Laborator2.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorID"] = new SelectList(_context.Authors, "AuthorID", "AuthorID", book.AuthorID);
             return View(book);
         }
 
@@ -129,6 +131,7 @@ namespace Miclea_Adela_Laborator2.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (book == null)
             {
@@ -152,14 +155,14 @@ namespace Miclea_Adela_Laborator2.Controllers
             {
                 _context.Books.Remove(book);
             }
-
+            
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool BookExists(int id)
         {
-            return (_context.Books?.Any(e => e.ID == id)).GetValueOrDefault();
+          return (_context.Books?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }
