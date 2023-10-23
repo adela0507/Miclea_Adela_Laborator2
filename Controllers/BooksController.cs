@@ -62,7 +62,8 @@ namespace Miclea_Adela_Laborator2.Controllers
                     break;
             }
             int pageSize = 2;
-            return View(await PaginatedList<Book>.CreateAsync(books.AsNoTracking(), pageNumber ??
+            return View(await PaginatedList<Book>.CreateAsync(books.Include(b=>b.Author)
+                .AsNoTracking(), pageNumber ??
            1, pageSize));
         }
 
