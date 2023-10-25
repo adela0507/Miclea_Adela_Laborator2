@@ -16,7 +16,7 @@ namespace Miclea_Adela_Laborator2.Models
 
         public decimal Price { get; set; }
         public ICollection<Order>? Orders { get; set; }
-        public ICollection<PublishedBook> PublishedBooks { get; set; }
+        public ICollection<PublishedBook>? PublishedBooks { get; set; }
 
     }
 }
