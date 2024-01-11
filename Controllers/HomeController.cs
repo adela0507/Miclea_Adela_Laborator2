@@ -10,6 +10,10 @@ namespace Miclea_Adela_Laborator2.Controllers
 {
     public class HomeController : Controller
     {
+        public IActionResult Chat()
+        {
+            return View();
+        }
         public async Task<ActionResult> Statistics()
         {
             IQueryable<OrderGroup> data =
