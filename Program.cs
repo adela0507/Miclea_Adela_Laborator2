@@ -13,11 +13,24 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
 builder.Services.AddSignalR();
+builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IdentityContext>(options =>
 
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddAuthorization(opts => {
+    opts.AddPolicy("SalesManager", policy => {
+        policy.RequireRole("Manager");
+        policy.RequireClaim("Department", "Sales");
+    });
+});
+builder.Services.ConfigureApplicationCookie(opts =>
+{
+    opts.AccessDeniedPath = "/Identity/Account/AccessDenied";
+
+});
 
 
 var app = builder.Build();

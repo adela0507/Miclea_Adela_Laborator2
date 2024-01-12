@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using Miclea_Adela_Laborator2.Data;
 using Miclea_Adela_Laborator2.Models;
 using Miclea_Adela_Laborator2.Models.LibraryViewModels;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace Miclea_Adela_Laborator2.Controllers
 {
+   // [Authorize(Policy = "OnlySales")]
+
     public class PublishersController : Controller
     {
         private readonly LibraryContext _context;
